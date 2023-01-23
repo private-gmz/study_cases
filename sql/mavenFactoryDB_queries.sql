@@ -271,4 +271,15 @@ SELECT
 FROM orders LEFT JOIN order_items ON orders.order_id = order_items.order_id
 AND order_items.is_primary_item = 0
 GROUP BY 1
-#######################################################
+
+################################################################
+# VIEW FOR NUMBER OF BRAND VS NONBRAND SEARCHES PER YEAR_MONTH #
+################################################################
+CREATE VIEW  brand_vs_nonbrand_compain AS
+SELECT 
+	year(created_at) AS year,
+	month(created_at) AS month,
+	SUM(CASE WHEN utm_campaign = 'nonbrand' THEN 1 ELSE 0 END) AS nonbrand_search,
+	SUM(CASE WHEN utm_campaign = 'brand' THEN 1 ELSE 0 END) AS brand_search 
+FROM `mvfactory`.`website_sessions` 
+GROUP BY 1,2
